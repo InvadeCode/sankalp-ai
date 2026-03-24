@@ -1,5 +1,73 @@
 import React, { useState, useEffect } from 'react';
 
+const Preloader = ({ onComplete }) => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const startTime = Date.now();
+    let completed = false; // strict guard to prevent any loops
+
+    const timer = setInterval(() => {
+      if (completed) return;
+      const elapsed = Date.now() - startTime;
+      let newProgress = 0;
+
+      if (elapsed < 600) {
+        // 1. Fast to 12%
+        newProgress = (elapsed / 600) * 12;
+      } else if (elapsed < 1600) {
+        // 2. Stuck at 12% for 1 second
+        newProgress = 12;
+      } else if (elapsed < 2400) {
+        // 3. Whoosh to 99%
+        const p = (elapsed - 1600) / 800;
+        // easeOutCubic function for the whoosh effect
+        const easeOut = 1 - Math.pow(1 - p, 3);
+        newProgress = 12 + (easeOut * 87);
+      } else if (elapsed < 3600) {
+        // 4. Stuck at 99% for 1.2 seconds
+        newProgress = 99;
+      } else if (elapsed < 3800) {
+        // 5. Final jump to 100%
+        newProgress = 100;
+      } else {
+        newProgress = 100;
+        completed = true;
+        clearInterval(timer);
+        setTimeout(() => onComplete(), 100);
+      }
+      
+      setProgress(Math.min(newProgress, 100));
+    }, 16); // Run at ~60fps for buttery smooth numbers
+
+    return () => clearInterval(timer);
+  }, []); // Empty dependency array mathematically guarantees it only runs once
+
+  return (
+    <div className="absolute inset-0 bg-neutral-50 flex flex-col items-center justify-center font-sans overflow-hidden">
+      {/* Background Fill loading from bottom to top */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 bg-neutral-200"
+        style={{ height: `${progress}%` }}
+      ></div>
+
+      <div className="relative z-10 w-full max-w-4xl px-8 flex flex-col items-center text-center">
+        {/* Massive Percentage Counter - Thinned out to 15% weight */}
+        <div className="text-[120px] md:text-[180px] font-thin text-neutral-800 tracking-tighter leading-none mb-12 drop-shadow-sm">
+          {Math.floor(progress)}<span className="text-[60px] md:text-[90px] font-thin text-neutral-400">%</span>
+        </div>
+
+        {/* Lo-Fi Placeholder Text Bars matching the main site aesthetic */}
+        <div className="flex flex-col items-center gap-3 md:gap-4 w-full max-w-md opacity-60">
+          <div className="w-full h-4 md:h-5 bg-neutral-400 rounded-xl"></div>
+          <div className="w-10/12 h-4 md:h-5 bg-neutral-400 rounded-xl"></div>
+          <div className="w-4/5 h-4 md:h-5 bg-neutral-400 rounded-xl"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const HeroDataGrid = () => {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
@@ -176,10 +244,20 @@ const InteractiveLineChart = () => {
 
 export default function App() {
   const [activeRationale, setActiveRationale] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   useEffect(() => {
     document.title = "IIT Delhi LoFI Wireframe";
   }, []);
+
+  const handlePreloaderComplete = () => {
+    setIsLoading(false);
+    // Allow animation to complete before removing from DOM
+    setTimeout(() => {
+      setShowPreloader(false);
+    }, 800);
+  };
 
   const rationales = {
     hero: {
@@ -327,7 +405,8 @@ export default function App() {
   return (
     <>
       <style dangerouslySetInnerHTML={{__html: `
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* UPDATED IMPORT TO INCLUDE WEIGHTS 100 (Thin) and 200 (Extra Light) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
         
         * {
           font-family: 'Poppins', sans-serif;
@@ -342,7 +421,7 @@ export default function App() {
           background-image: radial-gradient(#404040 1px, transparent 1px);
           background-size: 24px 24px;
         }
-        
+
         @keyframes scroll {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -355,7 +434,15 @@ export default function App() {
         }
       `}} />
 
-      <div className="min-h-screen bg-neutral-50 bg-dot-pattern selection:bg-neutral-200 text-neutral-600 relative overflow-x-hidden">
+      {/* --- PRELOADER --- */}
+      {showPreloader && (
+        <div className={`fixed inset-0 z-[9999] transition-opacity duration-700 ease-in-out ${isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <Preloader onComplete={handlePreloaderComplete} />
+        </div>
+      )}
+
+      {/* MAIN APP CONTAINER */}
+      <div className={`min-h-screen bg-neutral-50 bg-dot-pattern selection:bg-neutral-200 text-neutral-600 relative overflow-x-hidden transition-opacity duration-1000 ${isLoading ? 'opacity-0 h-screen overflow-hidden' : 'opacity-100'}`}>
         <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/50 to-white/90 pointer-events-none fixed"></div>
 
         <div className="relative z-10">
