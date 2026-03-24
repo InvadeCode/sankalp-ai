@@ -713,46 +713,52 @@ const NewsDetail = ({ item, navigate }) => {
   );
 };
 
+// --- Main Pages ---
+
 const HomePage = ({ navigate, onSelectStudy }) => (
   <div className="animate-fade-up">
-    {/* 1. Hero */}
-    <header className="pt-40 md:pt-48 pb-16 md:pb-20 px-6 lg:px-12 max-w-[1400px] mx-auto min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center pointer-events-none">
-      <div className="w-full max-w-5xl pointer-events-auto">
-        <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-[11px] border border-black/10 bg-black/[0.03] backdrop-blur-sm text-[9px] md:text-[10px] font-semibold text-gray-800 mb-8 md:mb-10 uppercase tracking-widest shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-pulse"></span>
-          Global Policy Tracking Active
+    {/* Hero & Ticker Wrapper to snap ticker to bottom */}
+    <div className="relative min-h-screen flex flex-col pt-32 md:pt-40 pb-20">
+      
+      {/* 1. Hero Content */}
+      <header className="flex-1 flex flex-col justify-center px-6 lg:px-12 max-w-[1400px] mx-auto w-full pointer-events-none pb-12 md:pb-16">
+        <div className="w-full max-w-5xl pointer-events-auto">
+          <div className="animate-fade-up inline-flex items-center gap-3 px-4 py-2 rounded-[11px] border border-black/10 bg-black/[0.03] backdrop-blur-sm text-[9px] md:text-[10px] font-semibold text-gray-800 mb-8 md:mb-10 uppercase tracking-widest shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-pulse"></span>
+            Global Policy Tracking Active
+          </div>
+          <h1 className="animate-fade-up delay-100 font-heading tracking-tighter leading-[1.02] mb-8 md:mb-10 text-black">
+            <span className="font-semibold block text-[12vw] sm:text-[10vw] md:text-[72px] lg:text-[84px] xl:text-[96px] whitespace-nowrap">Policy engineered</span>
+            <span className="font-semibold block text-[12vw] sm:text-[10vw] md:text-[72px] lg:text-[84px] xl:text-[96px] whitespace-nowrap -mt-1 md:-mt-3">through data.</span>
+          </h1>
+          <p className="animate-fade-up delay-200 text-sm md:text-base text-gray-500 leading-relaxed mb-10 md:mb-12 font-[300] max-w-2xl font-sans pr-4">
+            We architect socio-economic frameworks for governments and global entities. Progress is not guessed; it is systematically engineered, measured, and scaled.
+          </p>
+          <div className="animate-fade-up delay-300 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <button onClick={() => navigate('productsuite')} className="w-full sm:w-auto h-12 px-8 bg-black text-white rounded-[11px] text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-gray-800 transition-colors flex justify-center items-center gap-3 shadow-lg shadow-black/10">
+              Explore Product Suite <Activity size={16} />
+            </button>
+            <button onClick={() => navigate('methodology')} className="w-full sm:w-auto h-12 px-8 bg-white/50 backdrop-blur-sm text-black border border-black/10 rounded-[11px] text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-black/5 transition-colors flex justify-center items-center gap-2">
+              Read Methodology
+            </button>
+          </div>
         </div>
-        <h1 className="animate-fade-up delay-100 font-heading tracking-tighter leading-[1.02] mb-8 md:mb-10 text-black">
-          <span className="font-semibold block text-[12vw] sm:text-[10vw] md:text-[72px] lg:text-[84px] xl:text-[96px] whitespace-nowrap">Policy engineered</span>
-          <span className="font-semibold block text-[12vw] sm:text-[10vw] md:text-[72px] lg:text-[84px] xl:text-[96px] whitespace-nowrap -mt-1 md:-mt-3">through data.</span>
-        </h1>
-        <p className="animate-fade-up delay-200 text-sm md:text-base text-gray-500 leading-relaxed mb-10 md:mb-12 font-[300] max-w-2xl font-sans pr-4">
-          We architect socio-economic frameworks for governments and global entities. Progress is not guessed; it is systematically engineered, measured, and scaled.
-        </p>
-        <div className="animate-fade-up delay-300 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <button onClick={() => navigate('productsuite')} className="w-full sm:w-auto h-12 px-8 bg-black text-white rounded-[11px] text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-gray-800 transition-colors flex justify-center items-center gap-3 shadow-lg shadow-black/10">
-            Explore Product Suite <Activity size={16} />
-          </button>
-          <button onClick={() => navigate('methodology')} className="w-full sm:w-auto h-12 px-8 bg-white/50 backdrop-blur-sm text-black border border-black/10 rounded-[11px] text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-black/5 transition-colors flex justify-center items-center gap-2">
-            Read Methodology
-          </button>
-        </div>
-      </div>
-    </header>
+      </header>
 
-    {/* 2. Scrolling Ticker */}
-    <div className="w-full border-y border-black/10 bg-white/50 backdrop-blur-sm py-4 md:py-5 overflow-hidden flex relative z-10 pointer-events-none shadow-sm">
-      <div className="flex w-max animate-scroll gap-8 md:gap-16 whitespace-nowrap text-[10px] md:text-[11px] font-heading font-semibold tracking-[0.2em] uppercase text-black items-center">
-        {[...Array(12)].map((_, i) => (
-          <React.Fragment key={i}>
-            <span>Data-Driven Governance</span>
-            <span className="w-1 h-1 rounded-full bg-black/20"></span>
-            <span>Algorithmic Policy</span>
-            <span className="w-1 h-1 rounded-full bg-black/20"></span>
-            <span>Socio-Economic Modeling</span>
-            <span className="w-1 h-1 rounded-full bg-black/20"></span>
-          </React.Fragment>
-        ))}
+      {/* 2. Scrolling Ticker (Snapped to absolute bottom) */}
+      <div className="absolute bottom-0 left-0 w-full border-y border-black/10 bg-white/50 backdrop-blur-sm py-4 md:py-5 overflow-hidden flex z-10 pointer-events-none shadow-sm">
+        <div className="flex w-max animate-scroll gap-8 md:gap-16 whitespace-nowrap text-[10px] md:text-[11px] font-heading font-semibold tracking-[0.2em] uppercase text-black items-center">
+          {[...Array(12)].map((_, i) => (
+            <React.Fragment key={i}>
+              <span>Data-Driven Governance</span>
+              <span className="w-1 h-1 rounded-full bg-black/20"></span>
+              <span>Algorithmic Policy</span>
+              <span className="w-1 h-1 rounded-full bg-black/20"></span>
+              <span>Socio-Economic Modeling</span>
+              <span className="w-1 h-1 rounded-full bg-black/20"></span>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -1186,11 +1192,14 @@ const AboutPage = () => (
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {[
-          { name: "Shivani Parihast", role: "Chief Executive Officer", desc: "Architecting the global transition from intuitive governance to predictive algorithmic execution. Defining the operational mandates for state and federal scaling." },
-          { name: "Suvendu Chand", role: "Chief Business & Growth Officer", desc: "Scaling deployment matrices across international and domestic infrastructure nodes. Directing institutional partnerships and civic tech integration." },
-          { name: "Anant Mishra", role: "Field Chief Information Officer", desc: "Overseeing secure municipal API ingestion, zero-latency data telemetry, and the live deployment of Sankalp's predictive modeling engines." }
+          { name: "Shivani Parihast", role: "Chief Executive Officer", img: "https://media.licdn.com/dms/image/v2/D5603AQHCwsPbD-v27Q/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1716368877207?e=1775692800&v=beta&t=8y4zfv2NNjsx09Pyi0LofBCvTFQWeGovj8brGDSYTxk", desc: "Architecting the global transition from intuitive governance to predictive algorithmic execution. Defining the operational mandates for state and federal scaling." },
+          { name: "Suvendu Chand", role: "Chief Business & Growth Officer", img: "https://media.licdn.com/dms/image/v2/D5603AQFakiXUPmy28A/profile-displayphoto-scale_400_400/B56ZxHYTzdIEAg-/0/1770724082041?e=1775692800&v=beta&t=rrkflEdvE6QsjcGjr40wGJ9txwq0cBuEavC3Dk1HO-Y", desc: "Scaling deployment matrices across international and domestic infrastructure nodes. Directing institutional partnerships and civic tech integration." },
+          { name: "Anant Mishra", role: "Field Chief Information Officer", img: "https://media.licdn.com/dms/image/v2/D4D03AQF7vMhy7XCz0w/profile-displayphoto-scale_400_400/B4DZnh.WPBH4Ag-/0/1760432842411?e=1775692800&v=beta&t=s64nHXkyLDMI3nE55Rx2dlw7PdOXwVvdg2APaq8RmCI", desc: "Overseeing secure municipal API ingestion, zero-latency data telemetry, and the live deployment of Sankalp's predictive modeling engines." }
         ].map((member, i) => (
           <div key={i} className="glass-card p-10 md:p-12 bg-[#FAFAFA] flex flex-col group cursor-default">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mb-6 border border-black/10 shrink-0">
+               <img src={member.img} alt={member.name} className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" />
+            </div>
             <h4 className="text-2xl md:text-3xl font-heading font-semibold text-black mb-3">{member.name}</h4>
             <p className="text-[10px] md:text-[11px] font-bold tracking-[0.15em] text-gray-500 uppercase mb-8">{member.role}</p>
             <p className="text-sm font-light text-gray-600 leading-relaxed mt-auto">{member.desc}</p>
